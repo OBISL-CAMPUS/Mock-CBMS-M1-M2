@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mock Exam - Module 1 and 2</title>
+    <style>
+        /* Open eClass / Standard LMS Classic Theme */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+            line-height: 1.5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .exam-container {
+            width: 100%;
+            max-width: 850px;
+            margin: 0 auto;
+            border: 1px solid #dddddd;
+            background-color: #ffffff;
+        }
+
+        /* Header Area */
+        .header {
+            background-color: #f5f5f5;
+            border-bottom: 1px solid #e3e3e3;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #222222;
+        }
+
+        .timer-badge {
+            background-color: #f2dede;
+            color: #a94442;
+            border: 1px solid #ebccd1;
+            padding: 5px 10px;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background-color: #eeeeee;
+            display: none;
+            border-bottom: 1px solid #dddddd;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #337ab7;
+            width: 0%;
+        }
+
+        .content-area {
+            padding: 20px;
+        }
+
+        /* View State Management */
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        /* Alerts & Notices */
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+        }
+
+        /* Specifically requested Red System Notice */
+        .alert-danger {
+            background-color: #f2dede;
+            color: #a94442;
+            border-color: #ebccd1;
+        }
+
+        .alert-info {
+            background-color: #d9edf7;
+            color: #31708f;
+            border-color: #bce8f1;
+        }
+
+        /* Question UI */
+        .question-header {
+            font-size: 0.9rem;
+            color: #777777;
+            font-weight: bold;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eeeeee;
+            padding-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .question-text {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333333;
+        }
+
+        /* Form Options */
+        .options-container {
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .option-label {
+            display: block;
+            padding: 10px 15px;
+            border: 1px solid #dddddd;
+            margin-bottom: -1px; /* Overlap borders like a standard list group */
+            cursor: pointer;
+            background-color: #ffffff;
+            font-size: 0.95rem;
+        }
+
+        .option-label:first-child {
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+
+        .option-label:last-child {
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+            margin-bottom: 0;
+        }
+
+        .option-label:hover {
+            background-color: #f9f9f9;
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .option-label.selected {
+            background-color: #d9edf7;
+            border-color: #bce8f1;
+            color: #31708f;
+            z-index: 2;
+            position: relative;
+        }
+
+        /* Buttons */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eeeeee;
+        }
+
+        button {
+            padding: 8px 16px;
+            border: 1px solid transparent;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        button:disabled {
+            background-color: #eeeeee;
+            color: #999999;
+            border-color: #dddddd;
+            cursor: not-allowed;
+        }
+
+        .btn-primary { 
+            background-color: #337ab7; 
+            color: #ffffff; 
+            border-color: #2e6da4; 
+        }
+        
+        .btn-success { 
+            background-color: #5cb85c; 
+            color: #ffffff; 
+            border-color: #4cae4c; 
+        }
+        
+        .btn-secondary { 
+            background-color: #ffffff; 
+            color: #333333; 
+            border-color: #cccccc; 
+        }
+
+        /* Review / Results Section */
+        .score-box {
+            background-color: #dff0d8;
+            border: 1px solid #d6e9c6;
+            color: #3c763d;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .review-card {
+            border: 1px solid #dddddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+        }
+
+        .review-card.correct { border-left: 5px solid #5cb85c; }
+        .review-card.incorrect { border-left: 5px solid #d9534f; }
+
+        .logic-box {
+            background-color: #f9f9f9;
+            padding: 12px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            border: 1px solid #eeeeee;
+            color: #555555;
+        }
+
+        .badge {
+            padding: 3px 8px;
+            border-radius: 3px;
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .badge.correct { background-color: #5cb85c; }
+        .badge.incorrect { background-color: #d9534f; }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .controls { flex-direction: column-reverse; gap: 10px; }
+            button { width: 100%; padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="exam-container">
+    <div class="header">
+        <h2>Mock Exam: Module 1 & 2</h2>
+        <div id="timer-display" class="timer-badge" style="display: none;">30:00</div>
+    </div>
+    
+    <!-- Top Progress Bar -->
+    <div id="progress-container" class="progress-container">
+        <div id="progress-bar" class="progress-bar"></div>
+    </div>
+
+    <div class="content-area">
+        
+        <!-- SCREEN 1: WELCOME SCREEN -->
+        <div id="welcome-view" class="view-section active">
+            <div class="alert alert-danger">
+                <strong>System Notice:</strong> In the original examination, you are allowed <strong>only 1 attempt</strong>. Once submitted, your score locks permanently.
+            </div>
+            <div class="alert alert-info">
+                <strong>Mock Exam Policy:</strong> This is a sandbox environment. You can attempt this mock exam an unlimited number of times to master the curriculum and timing.
+            </div>
+            <div style="margin: 20px 0; padding: 15px; background-color: #f9f9f9; border: 1px solid #dddddd;">
+                <div style="margin-bottom: 5px;"><strong>Format:</strong> 10 Scenario & Theory Questions</div>
+                <div><strong>Time Limit:</strong> 30 Minutes</div>
+            </div>
+            <div style="text-align: center;">
+                <button class="btn-primary" style="width: 100%; max-width: 300px;" onclick="startExam()">Start Mock Examination</button>
+            </div>
+        </div>
+
+        <!-- SCREEN 2: QUESTION UI -->
+        <div id="question-view" class="view-section">
+            <div class="question-header">
+                <span id="q-module">Module 1</span>
+                <span id="q-counter">1 / 10</span>
+            </div>
+            <div id="q-text" class="question-text">Loading question...</div>
+            
+            <div id="q-options" class="options-container">
+                <!-- Options injected dynamically via JavaScript -->
+            </div>
+
+            <div class="controls">
+                <button id="btn-prev" class="btn-secondary" onclick="prevQuestion()">Previous</button>
+                <button id="btn-next" class="btn-primary" onclick="nextQuestion()">Next Question</button>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: RESULTS SUMMARY -->
+        <div id="result-view" class="view-section">
+            <h3 style="margin-top: 0; color: #3c763d; border-bottom: 1px solid #eeeeee; padding-bottom: 10px;">Exam Completed Successfully</h3>
+            <p style="color: #555555;">Your diagnostic metrics have been calculated and processed.</p>
+            
+            <div class="score-box">
+                <table style="width: 100%; max-width: 300px; margin: 0 auto; text-align: left;">
+                    <tr>
+                        <th style="padding: 5px 0;">Final Score:</th>
+                        <td id="final-score" style="font-weight: bold; font-size: 1.2rem;">0 / 10</td>
+                    </tr>
+                    <tr>
+                        <th style="padding: 5px 0;">Percentage:</th>
+                        <td id="final-percentage" style="font-weight: bold; font-size: 1.2rem;">0%</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px; max-width: 300px; margin: 0 auto;">
+                <button class="btn-primary" onclick="showReview()">Review Answers & Logic</button>
+                <button class="btn-secondary" onclick="location.reload()">Take Exam Again</button>
+            </div>
+        </div>
+
+        <!-- SCREEN 4: DETAILED REVIEW MATRIX -->
+        <div id="review-view" class="view-section">
+            <h3 style="margin-top: 0; border-bottom: 1px solid #eeeeee; padding-bottom: 10px;">Diagnostic Review Matrix</h3>
+            <div id="review-container" style="margin-top: 20px;">
+                <!-- Review cards injected dynamically via JavaScript -->
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn-primary" style="width: 100%; max-width: 300px;" onclick="location.reload()">Restart Mock Exam</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // --- QUESTION DATABASE (Based on your provided curriculum) ---
+    const quizData = [
+        {
+            module: "Module 1: Business & Management Principles",
+            question: "01. A fast-growing enterprise intends to move away from its loose, relationship-driven startup approach toward an objective organizational architecture. The leadership outlines a framework characterized by a strict hierarchical chain of command, explicitly written rules, functional division of specialized labor, and career progression based strictly on validated technical competence. Which management framework is this company implementing?",
+            options: [
+                "A) Contingency Framework",
+                "B) Max Weber's Bureaucratic Management",
+                "C) Human Relations Movement",
+                "D) Laissez-Faire Architecture"
+            ],
+            answer: 1, // Index of correct option (B)
+            logic: "Max Weber's Bureaucratic Management model specifies clear rules, structured hierarchies, absolute functional specialization, and technical qualification barriers to replace personal favoritism with goal-oriented corporate precision."
+        },
+        {
+            module: "Module 1: Business & Management Principles",
+            question: "02. A high-tech educational services platform faces severe environmental instability when competitors introduce AI evaluation tools overnight. To manage this highly volatile and ambiguous market environment, the platform's leadership completely abandons their linear process models and transitions to cross-functional, empowered teams that deliver small, functional system increments every two weeks. This structural pivot illustrates the adoption of which operational paradigm?",
+            options: [
+                "A) Bureaucratic model",
+                "B) Scientific management",
+                "C) Agile framework",
+                "D) Tall structural engine"
+            ],
+            answer: 2, // C
+            logic: "The Agile Framework focuses on self-organizing cross-functional units delivering incremental system updates iteratively (e.g., every two weeks) to withstand volatile environments."
+        },
+        {
+            module: "Module 1: Business & Management Principles",
+            question: "03. A factory supervisor notices that assembly line laborers significantly increase their production speed the moment they realize they are being closely observed by an industrial research team. This psychological phenomenon is known as the:",
+            options: [
+                "A) Taylorism shift",
+                "B) Operating leverage",
+                "C) Hawthorne effect",
+                "D) Objective alignment"
+            ],
+            answer: 2, // C
+            logic: "The Hawthorne Effect demonstrates that employees modify their work output and increase production efficiency in response to the psychological awareness of being observed by investigators."
+        },
+        {
+            module: "Module 1: Business & Management Principles",
+            question: "04. An organization characterized by a very narrow span of control introduces multiple layers of management, causing severe communication delays and friction. This configuration describes which structural profile?",
+            options: [
+                "A) Flat structure",
+                "B) Tall structure",
+                "C) Matrix core",
+                "D) Hybrid network"
+            ],
+            answer: 1, // B
+            logic: "Tall organizational patterns feature narrow spans of control matched with numerous supervisory hierarchies, increasing communications latency and corporate operational drag."
+        },
+        {
+            module: "Module 1: Business & Management Principles",
+            question: "05. An executive spends her week verifying policy compliance logs, checking automated payroll system configurations, and auditing legal adherence manuals. Which operational role within the organizational engine is being primarily performed?",
+            options: [
+                "A) Manager",
+                "B) Transformational leader",
+                "C) Administrator",
+                "D) Agile coach"
+            ],
+            answer: 2, // C
+            logic: "An Administrator focuses on system health maintenance, rules verification, logging compliance audits, and preserving systematic operational alignment rather than structural organizational transformation."
+        },
+        {
+            module: "Module 2: Financial Literacy for Managers",
+            question: "06. A newly launched training institute experiences an explosive 60% growth in student enrollments by offering a 12-month deferred payment plan. The income statement reflects high paper profitability. However, because actual cash is tied up in outstanding balances, the director cannot pay commercial rent or instructors' salaries, threatening insolvency. This critical bottleneck highlights which fundamental business exposure?",
+            options: [
+                "A) High operating leverage",
+                "B) Profit vs. cash trap",
+                "C) Favorable variance benefit",
+                "D) Capital expenditure freeze"
+            ],
+            answer: 1, // B
+            logic: "The profit vs. cash trap occurs when revenue recognition under accrual accounting shows paper gains, but liquidity is locked in Accounts Receivable, preventing the business from meeting short-term operating liabilities."
+        },
+        {
+            module: "Module 2: Financial Literacy for Managers",
+            question: "07. A transportation logistics enterprise operates with massive fixed operating costs due to expensive long-term truck leases. When market demand drops by 15%, the firm's operating income crashes by over 70%. The company's high fixed-cost structure creates a high sensitivity to changes in sales volume. This structural amplification exposure is driven by:",
+            options: [
+                "A) Accrual allocation",
+                "B) Double-entry asymmetry",
+                "C) High operating leverage",
+                "D) Opportunity cost variance"
+            ],
+            answer: 2, // C
+            logic: "High Operating Leverage matches large fixed operational cost components against small variable segments. This structure scales net income up rapidly on sales increases, but triggers severe profit losses on marginal sales drops."
+        },
+        {
+            module: "Module 2: Financial Literacy for Managers",
+            question: "08. A corporation records its commercial transactions the exact moment they occur, regardless of when physical cash changes hands. Which underlying accounting method is being applied here?",
+            options: [
+                "A) Cash basis",
+                "B) Accrual basis",
+                "C) Variance tracking",
+                "D) Residual calculation"
+            ],
+            answer: 1, // B
+            logic: "Accrual basis accounting recognizes financial events and logs economic obligations the precise moment goods or services transfer ownership, ignoring current physical asset movements."
+        },
+        {
+            module: "Module 2: Financial Literacy for Managers",
+            question: "09. An operations manager subtracts the unit variable cost of a software program from its retail selling price. Which specific financial metric has the manager isolated?",
+            options: [
+                "A) Net profit margin",
+                "B) Break-even point",
+                "C) Unit contribution margin",
+                "D) Operating leverage ratio"
+            ],
+            answer: 2, // C
+            logic: "Unit Contribution Margin isolates available revenue runway per product unit by deducting Unit Variable Cost from Unit Selling Price, showing what funds remain to clear collective system fixed expenses."
+        },
+        {
+            module: "Module 2: Financial Literacy for Managers",
+            question: "10. A training manager observes that the actual utility expenditures for a facility reached LKR 90,000 against a planned budget allocation of LKR 70,000. How is this cost deviation classified?",
+            options: [
+                "A) Favorable variance",
+                "B) Unfavorable variance",
+                "C) Break-even variance",
+                "D) Opportunity variance"
+            ],
+            answer: 1, // B
+            logic: "An Unfavorable Variance registers when actual system expenditures cross past expected baseline financial metrics, representing a negative deviation from budget allocations."
+        }
+    ];
+
+    // --- APPLICATION STATE ---
+    let currentQuestionIndex = 0;
+    let userSelections = new Array(quizData.length).fill(null);
+    let timeRemaining = 30 * 60; // 30 minutes in seconds
+    let timerInterval = null;
+
+    // --- CORE LOGIC ---
+
+    function switchView(viewId) {
+        document.querySelectorAll('.view-section').forEach(el => {
+            el.classList.remove('active');
+        });
+        document.getElementById(viewId).classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
+    function startExam() {
+        switchView('question-view');
+        
+        // Setup Header UI
+        document.getElementById('timer-display').style.display = 'block';
+        document.getElementById('progress-container').style.display = 'block';
+        
+        // Start Countdown
+        timerInterval = setInterval(() => {
+            timeRemaining--;
+            updateTimerDisplay();
+            
+            if(timeRemaining <= 0) {
+                clearInterval(timerInterval);
+                submitExam();
+            }
+        }, 1000);
+
+        renderQuestion();
+    }
+
+    function updateTimerDisplay() {
+        let m = Math.floor(timeRemaining / 60);
+        let s = timeRemaining % 60;
+        document.getElementById('timer-display').textContent = 
+            (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+    }
+
+    function updateProgress() {
+        const progressPercent = ((currentQuestionIndex) / quizData.length) * 100;
+        document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+        document.getElementById('q-counter').textContent = `${currentQuestionIndex + 1} / ${quizData.length}`;
+    }
+
+    function renderQuestion() {
+        const qData = quizData[currentQuestionIndex];
+        
+        document.getElementById('q-module').textContent = qData.module;
+        document.getElementById('q-text').textContent = qData.question;
+        updateProgress();
+
+        const optionsContainer = document.getElementById('q-options');
+        optionsContainer.innerHTML = ''; 
+
+        qData.options.forEach((optText, index) => {
+            const label = document.createElement('label');
+            label.className = 'option-label';
+            if (userSelections[currentQuestionIndex] === index) {
+                label.classList.add('selected');
+            }
+
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'exam-option';
+            input.value = index;
+            if (userSelections[currentQuestionIndex] === index) input.checked = true;
+            
+            // Click Handler
+            input.onchange = () => {
+                userSelections[currentQuestionIndex] = index;
+                renderQuestion(); // Re-render to highlight selected option
+            };
+
+            const textSpan = document.createElement('span');
+            textSpan.textContent = optText;
+
+            label.appendChild(input);
+            label.appendChild(textSpan);
+            optionsContainer.appendChild(label);
+        });
+
+        // Toggle button states
+        document.getElementById('btn-prev').disabled = currentQuestionIndex === 0;
+        
+        const nextBtn = document.getElementById('btn-next');
+        if (currentQuestionIndex === quizData.length - 1) {
+            nextBtn.textContent = 'Submit Exam';
+            nextBtn.className = 'btn-success';
+            nextBtn.onclick = submitExam;
+        } else {
+            nextBtn.textContent = 'Next Question';
+            nextBtn.className = 'btn-primary';
+            nextBtn.onclick = nextQuestion;
+        }
+    }
+
+    function nextQuestion() {
+        if (currentQuestionIndex < quizData.length - 1) {
+            currentQuestionIndex++;
+            renderQuestion();
+            window.scrollTo(0, 0);
+        }
+    }
+
+    function prevQuestion() {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            renderQuestion();
+            window.scrollTo(0, 0);
+        }
+    }
+
+    function submitExam() {
+        clearInterval(timerInterval);
+        document.getElementById('timer-display').style.display = 'none';
+        document.getElementById('progress-container').style.display = 'none';
+
+        // Tally Score
+        let score = 0;
+        userSelections.forEach((selection, index) => {
+            if (selection === quizData[index].answer) {
+                score++;
+            }
+        });
+
+        // Update Results UI
+        document.getElementById('final-score').textContent = `${score} / ${quizData.length}`;
+        document.getElementById('final-percentage').textContent = `${Math.round((score / quizData.length) * 100)}%`;
+        
+        switchView('result-view');
+    }
+
+    function showReview() {
+        const container = document.getElementById('review-container');
+        container.innerHTML = '';
+
+        quizData.forEach((qData, index) => {
+            const userAnsIdx = userSelections[index];
+            const isCorrect = userAnsIdx === qData.answer;
+            const isUnanswered = userAnsIdx === null;
+
+            const card = document.createElement('div');
+            card.className = `review-card ${isCorrect ? 'correct' : 'incorrect'}`;
+
+            const badge = document.createElement('span');
+            badge.className = `badge ${isCorrect ? 'correct' : 'incorrect'}`;
+            badge.textContent = isCorrect ? '✓ Correct' : (isUnanswered ? '⚠ Unanswered' : '✗ Incorrect');
+
+            const qTitle = document.createElement('div');
+            qTitle.style.fontWeight = 'bold';
+            qTitle.style.marginBottom = '10px';
+            qTitle.textContent = qData.question;
+
+            const ansInfo = document.createElement('div');
+            ansInfo.style.fontSize = '0.95rem';
+            
+            const userSelectedText = isUnanswered ? 'None selected' : qData.options[userAnsIdx];
+            ansInfo.innerHTML = `
+                <div style="margin-bottom: 5px;"><strong>Your Answer:</strong> <span style="color: ${isCorrect ? '#3c763d' : '#a94442'};">${userSelectedText}</span></div>
+                ${!isCorrect ? `<div><strong>Target Answer:</strong> <span style="color: #3c763d;">${qData.options[qData.answer]}</span></div>` : ''}
+            `;
+
+            const logicBox = document.createElement('div');
+            logicBox.className = 'logic-box';
+            logicBox.innerHTML = `<strong>Strategic Corporate Logic:</strong><br>${qData.logic}`;
+
+            card.appendChild(badge);
+            card.appendChild(qTitle);
+            card.appendChild(ansInfo);
+            card.appendChild(logicBox);
+
+            container.appendChild(card);
+        });
+
+        switchView('review-view');
+    }
+</script>
+</body>
+</html>
